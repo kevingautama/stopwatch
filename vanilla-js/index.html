@@ -1,0 +1,91 @@
+<html>
+    <head>
+        <title>
+            Stopwatch - Vanilla JS
+        </title>
+        <style>
+            .mr{
+                margin-right: 1.25rem;
+            }
+        </style>
+    </head>
+    <body>
+        <div style="display: flex; flex-direction: column; height: 100%;">
+            <h2 style="margin: 0 auto; margin-top: auto; margin-bottom: 1.25rem;" id="timer">0:0</h2>
+            <div style="display: flex; margin: 0 auto; margin-bottom: 1.25rem;">
+                <button class="mr" id="start-button">Start/Resume</button>
+                <button class="mr" id="stop-button">Stop</button>
+                <button class="mr" id="reset-button">Reset</button>
+                <button id="lap-button">Lap</button>
+            </div>
+            <div style="margin: 0 auto; margin-bottom: auto;">
+                <ul style="padding:0" id="lap-times">
+                    
+                </ul>
+            </div>
+        </div>
+        
+    </body>
+    <script>
+        (function(){
+            let startButton = document.getElementById('start-button');
+            let stopButton = document.getElementById('stop-button');
+            let resetButton = document.getElementById('reset-button');
+            let lapButton = document.getElementById('lap-button');
+            let timerDisplay = document.getElementById('timer');
+            let lapTimesDisplay = document.getElementById('lap-times');
+
+            let interval;
+            let timeInSecond = 0;
+            let lapTimes = [];
+
+            function generateTimerDisplay(seconds){
+                if(seconds > 0){
+                    let minutes = Math.floor(seconds / 60);
+                    seconds = seconds % 60;
+                    return `${minutes}:${seconds}`;
+                }
+                else{
+                    return '0:0';
+                }
+            }
+
+            startButton.addEventListener('click', function(){
+                clearInterval(interval);
+
+                interval = setInterval(function(){
+                    timeInSecond++;
+
+                    timerDisplay.innerText = generateTimerDisplay(timeInSecond);
+                }, 1000);
+
+            });
+
+            stopButton.addEventListener('click', function(){
+                clearInterval(interval);
+            });
+
+            resetButton.addEventListener('click', function(){
+                clearInterval(interval);
+
+                timeInSecond = 0;
+                lapTimes = [];
+
+                lapTimesDisplay.innerHTML = '';
+                timerDisplay.innerText = generateTimerDisplay(timeInSecond);
+            });
+
+            lapButton.addEventListener('click', function(){
+                lapTimes.push(timeInSecond);
+                
+                let html = '';
+
+                lapTimes.forEach(function(value, index){
+                    html += `<li>${generateTimerDisplay(value)}</li>`;
+                });
+
+                lapTimesDisplay.innerHTML = html;
+            });
+        })();
+    </script>
+</html>
